@@ -34,6 +34,7 @@ class RejectionReasonWizard(models.TransientModel):
                 template = self.env.ref('pragtech_approval_hub_payment.reject_payment_email_template')
                 self.payment_id.write({'reason': self.reason})
                 template.with_context(context).send_mail(self.payment_id.id,force_send=True)
+                print("Reject Mail Sent")
             return {'type': 'ir.actions.act_window_close'}
         else:
             raise ValidationError(_("You don't have permission to reject this order."))

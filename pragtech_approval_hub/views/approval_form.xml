@@ -20,7 +20,7 @@
                 <kanban class="o_modules_kanban" import="false">
                     <field name="name"/>
                     <field name="model_id"/>
-                    <field name="user_ids" />
+                    <field name="user_ids"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div t-attf-class="oe_kanban_card">
@@ -60,37 +60,35 @@
                 <form>
                     <header>
                         <button name="action_submit_user" class="oe_highlight" string="Submit" type="object"
-                                attrs="{'invisible': [('state', '=', 'submitted')]}"/>
+                                invisible="state =='submitted'"/>
 
-                        <button name="action_reset_draft" class="oe_highlight" string="Set to Draft" type="object"
-                                attrs="{'invisible': [('state', '!=', 'submitted')]}"/>
+                        <button name="action_reset_draft" class="oe_highlight" string="Set To Draft" type="object"
+                                invisible="state =='draft'"/>
 
                         <field name="state" widget="statusbar" statusbar_visible="draft,submitted" readonly="1"/>
                     </header>
                     <sheet>
                         <widget name="web_ribbon" title="Submitted" bg_color="bg-success"
-                                attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                                invisible="state =='draft'"/>
                         <group>
-                            <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="name" readonly="state != 'draft'"/>
                         </group>
                         <group>
                             <group>
-                                <field name="model_id" attrs="{'readonly': [('state', '!=', 'draft')]}"
-                                       required="True"/>
+                                <field name="model_id" readonly="state != 'draft'" required="True"/>
                             </group>
                         </group>
                         <group>
                             <field name="model_name" readonly="1" invisible="1"/>
                             <field name="domain_filter" widget="domain" options="{'model': 'model_name'}"
-                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                   readonly="state != 'draft'"/>
                         </group>
-
                         <notebook>
                             <page string="Approver User List">
                                 <group>
-                                    <field name="minimum_users" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="minimum_users" readonly="state != 'draft'"/>
                                 </group>
-                                <field name="user_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <field name="user_ids" readonly="state != 'draft'">
                                     <tree editable="bottom">
                                         <field name="user_id"/>
                                         <field name="status"/>
@@ -100,13 +98,13 @@
 
                             <page string="Email Configuration">
                                 <group>
-                                    <field name="mail_notification" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="mail_notification" readonly="state != 'draft'"/>
                                 </group>
                                 <group>
-                                    <group attrs="{'invisible': [('mail_notification', '=', False)]}">
+                                    <group invisible="mail_notification == False">
                                         <field name="email_template_id"
                                                domain="[('model_id', '=', 'approvehub.form')]"
-                                               attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                               readonly="state != 'draft'"/>
                                     </group>
                                 </group>
                             </page>

@@ -1,8 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
-
-
 class RejectionReasonWizard(models.TransientModel):
     _name = 'invoice.rejection.wizard'
 

@@ -145,7 +145,6 @@ class AccountPayment(models.Model):
                     return True
             else:
                 raise ValidationError(_("You don't have permission to Approve this order."))
-
     def action_reject(self):
         for order in self:
             logged_in_user = self.env.user
@@ -171,6 +170,7 @@ class AccountPayment(models.Model):
             if order.is_configured == False:
                 super(AccountPayment, order).action_post()
                 order.state = 'posted'
+
 
 class ApprovalUserLine(models.Model):
     _name = 'approvehub.payment.user.line'

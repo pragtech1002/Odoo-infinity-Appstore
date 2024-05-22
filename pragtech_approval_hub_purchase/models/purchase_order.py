@@ -1,6 +1,5 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-
 from odoo.osv import expression
 
 class PurchaseOrder(models.Model):
@@ -74,7 +73,9 @@ class PurchaseOrder(models.Model):
 
     def button_confirm(self):
         res = super(PurchaseOrder, self).button_confirm()
+        # Update the state to 'purchase' after confirmation
         self.write({'state': 'purchase'})
+
         return res
 
     def action_submit(self):
@@ -156,6 +157,7 @@ class PurchaseOrder(models.Model):
             user_line = order.approval_user_line_ids.filtered(
                 lambda line: line.user_id == logged_in_user and line.status == 'waiting_approval'
             )
+
             if user_line:
                 if user_line.state == 'mandatory':
                     return {
@@ -190,22 +192,22 @@ class ApprovalUserLine(models.Model):
         ('mandatory', 'Mandatory'),
         ('not_mandatory', 'Not Mandatory'),
     ], string='Status', default='mandatory', readonly=True)
+
     purchase_order_id = fields.Many2one('purchase.order', string='Purchase Order', readonly=True)
     has_approved = fields.Boolean(string='Has Approved', default=False, readonly=True)
     has_rejected = fields.Boolean(string='Has Rejected', default=False, readonly=True)
     rejection_reason = fields.Text(string='Rejection Reason', readonly=True)
+
 
 class PurchaseApprovalHubForm(models.Model):
     _inherit = 'approvehub.form'
 
     @api.model
     def _get_account_domain(self):
-
         domain = expression.OR([
             super(PurchaseApprovalHubForm, self)._get_account_domain(),
             [('model', '=', 'purchase.order')]
         ])
-
         return domain
 
     model_id = fields.Many2one(

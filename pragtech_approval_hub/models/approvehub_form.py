@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from odoo.osv import expression
 
 class ApproveHubForm(models.Model):
     _name = 'approvehub.form'
@@ -13,6 +14,11 @@ class ApproveHubForm(models.Model):
     name = fields.Char(string='Reference', required=True)
     model_id = fields.Many2one('ir.model', string='Model',domain=_get_account_domain)
     user_ids = fields.One2many('approvehub.form.user.line', 'approvehub_form_id', string='Approvers', required=True)
+    mail_notification = fields.Boolean(string='Mail Notification')
+    email_template_id = fields.Many2one('mail.template', string='Email Template',
+                                        domain="[('model_id.model', '=', 'approvehub.form')]")
+    minimum_users = fields.Integer(string='Minimum Approvers', default=0)
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('submitted', 'Submitted'),
@@ -20,11 +26,6 @@ class ApproveHubForm(models.Model):
 
     model_name = fields.Char(string='Model Name', related='model_id.model', readonly=True)
     domain_filter = fields.Text(string="Domain filter")
-    mail_notification = fields.Boolean(string='Mail Notification')
-    email_template_id = fields.Many2one('mail.template', string='Email Template',
-                                        domain="[('model_id.model', '=', 'approvehub.form')]")
-    minimum_users = fields.Integer(string='Minimum Approvers', default=0)
-
 
     @api.onchange('user_ids')
     def _check_unique_users(self):
@@ -63,7 +64,6 @@ class ApproveHubForm(models.Model):
                 emails = [user.partner_id.email for user in user_ids if user.partner_id.email]
                 email_values = {'email_to': ','.join(emails)}
                 default_template_id.send_mail(record.id, force_send=True, email_values=email_values)
-
             record.state = 'submitted'
 
     def action_reset_draft(self):
@@ -89,7 +89,7 @@ class ApproveHubFormUserLine(models.Model):
     status = fields.Selection([
         ('mandatory', 'Mandatory'),
         ('not_mandatory', 'Not Mandatory'),
-    ], string='Type of Approval', default='mandatory')
+    ], string='Status', default='mandatory')
 
     approvehub_form_id = fields.Many2one('approvehub.form', string='Approval Form')
 

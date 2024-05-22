@@ -9,14 +9,15 @@ class SaleOrder(models.Model):
 
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('submit', 'Submitted'),
         ('waiting', 'Waiting For Approval'),
         ('approved', 'Approved'),
+        ('submit', 'Submitted'),
         ('sent', 'Quotation Sent'),
         ('sale', 'Sales Order'),
         ('done', 'Locked'),
         ('cancel', 'Cancelled'),
         ('rejected', 'Rejected')
+
     ],
         string="Status", default='draft', copy=False, readonly=True)
 
@@ -50,6 +51,7 @@ class SaleOrder(models.Model):
                                 order.is_visible_buttons = True
                                 return
                 order.is_visible_buttons = False
+
 
     @api.model
     def default_get(self, fields_list):
@@ -85,7 +87,7 @@ class SaleOrder(models.Model):
                 raise ValidationError(_("Please add At Least One User in Approval."))
             if approvehub_form.domain_filter:
                 model_name = approvehub_form.model_id.model
-                domain = eval(approvehub_form.domain_filter)
+                domain = eval(approvehub_form.domain_filter)  # Evaluate the domain filter
                 if not self.env[model_name].search(expression.AND([domain, [('id', '=', order.id)]])):
                     order.state = 'draft'
                     order.is_configured = False
@@ -96,6 +98,7 @@ class SaleOrder(models.Model):
                     email_template = self.env.ref('pragtech_approval_hub_sale.approval_submit_email_template_id')
                     user_ids = order.approval_user_line_ids.mapped('user_id')
                     for user in user_ids:
+                        print("Mail Sent")
                         email_values = {
                             'email_to': user.partner_id.email,
                         }
@@ -106,11 +109,13 @@ class SaleOrder(models.Model):
                 email_template = self.env.ref('pragtech_approval_hub_sale.approval_submit_email_template_id')
                 user_ids = order.approval_user_line_ids.mapped('user_id')
                 for user in user_ids:
+                    print("Mail Sent")
                     email_values = {
                         'email_to': user.partner_id.email,
                     }
                     email_template.with_context(customer_name=user.name).send_mail(order.id, force_send=True,
                                                                                    email_values=email_values)
+
     def action_approve(self):
         template_id = self.env.ref('pragtech_approval_hub_sale.approval_approve_template_id')
         for order in self:
@@ -149,7 +154,6 @@ class SaleOrder(models.Model):
             else:
                 raise ValidationError(_("You don't have permission to Approve this order."))
 
-
     def action_reject(self):
         for order in self:
             logged_in_user = self.env.user
@@ -173,13 +177,17 @@ class SaleOrder(models.Model):
     def action_draft(self):
         for order in self:
             order.state = 'draft'
-            order.is_configured = True
-            order.is_visible_buttons = False
+            order.is_configured = True  # Set is_configured to True
+            order.is_visible_buttons = False  # Set is_visible_buttons to False
 
     def action_quotation_send(self):
         for order in self:
             order.state = 'sent'
         return True
+
+    def _can_be_confirmed(self):
+        self.ensure_one()
+        return self.state in {'draft', 'sent', 'approved'}
 
 class ApprovalUserLine(models.Model):
     _name = 'approvehub.sale.user.line'
@@ -201,9 +209,9 @@ class ApprovalUserLine(models.Model):
     has_rejected = fields.Boolean(string='Has Rejected', default=False, readonly=True)
     rejection_reason = fields.Text(string='Rejection Reason', readonly=True)
 
+
 class SaleApprovalHubForm(models.Model):
     _inherit = 'approvehub.form'
-
     @api.model
     def _get_account_domain(self):
         domain = expression.OR([
@@ -216,3 +224,8 @@ class SaleApprovalHubForm(models.Model):
         string='Model Name',
         domain=_get_account_domain
     )
+
+
+
+
+

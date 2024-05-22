@@ -27,7 +27,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td valign="top" style="font-size: 13px;">
-                                                        <div>Dear<t t-out="ctx['customer_name'] or ''"/>,
+                                                        <div>Dear <t t-out="ctx['customer_name'] or ''"/>,
                                                             <br/>
                                                             <br/>
                                                             We are pleased to inform you
@@ -40,26 +40,15 @@
                                                                 <t t-out="object.create_date"/>
                                                             </span>
                                                             <br/>
-                                                            <div>
-                                                                <p>
-                                                                    You can check the details of your order by clicking
-                                                                    the
-                                                                    button below:
-                                                                </p>
-                                                                <p>
-                                                                    <a t-if="object.id"
-                                                                       t-att-href="'/web#id=' + str(object.id) + '&amp;model=stock.picking'"
-                                                                       style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px">
-                                                                        View Inventory Stock
-                                                                    </a>
-                                                                </p>
-                                                            </div>
                                                             <br/>
+
                                                             <span style="font-size: 15px; font-weight: bold;">Here are
                                                                 the details of submission:
                                                             </span>
+
                                                             <br/>
                                                             <br/>
+
                                                             <table style="width: 100%; border-collapse: collapse; border: 2px solid #333; text-align: center;">
                                                                 <thead>
                                                                     <tr style="background-color: #333; color: #fff; font-weight: bold;">
@@ -87,6 +76,8 @@
                                                             </table>
                                                             <br/>
                                                             <br/>
+                                                            Your request has been Reviewed and Approved. Thank you for
+                                                            your submission!
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -101,9 +92,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <p>Your review and approval are valuable to us. We
-                                appreciate your feedback!
-                            </p>
                         </td>
                     </tr>
                 </table>

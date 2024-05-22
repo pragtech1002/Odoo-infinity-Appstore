@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-
-        <!--  Menu Operations  -->
         <menuitem id="approval_root"
                   name="ApproveHub"
                   sequence="10"/>

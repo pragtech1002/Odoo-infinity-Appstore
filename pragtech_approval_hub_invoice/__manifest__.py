@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Pragmatic Approve Hub Invoice',
-    'version': '16.0.4',
+    'version': '17.0.0.1',
     'category': 'Services',
     'author': 'Pragmatic TechSoft Pvt Ltd.',
     'website': 'http://pragtech.co.in',

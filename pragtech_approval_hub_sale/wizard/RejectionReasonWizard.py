@@ -2,16 +2,11 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
-
 class RejectionReasonWizard(models.TransientModel):
     _name = 'rejection.reason.wizard'
 
     reason = fields.Text(string='Rejection Reason', required=True)
     order_id = fields.Many2one('sale.order', 'Order', domain="[('state', '=', 'waiting_approval')]", ondelete='cascade')
-    # invoice_id = fields.Many2one('account.move', string='Invoice ID', readonly=True)
-
-    # purchase_order_id = fields.Many2one('purchase.order', 'Purchase Order',
-    #                                     domain="[('state', '=', 'waiting_approval')]", ondelete='cascade')
 
     @api.model
     def default_get(self, fields_list):

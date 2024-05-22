@@ -2,16 +2,16 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError,UserError
 from odoo.osv import expression
 
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
     _description = 'Invoicing'
 
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('submit', 'Submitted'),
         ('waiting', 'Waiting For Approval'),
         ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        ('submit', 'Submitted'),
         ('posted', 'Posted'),
         ('cancel', 'Cancelled'),
         ('rejected', 'Rejected')
@@ -112,6 +112,7 @@ class AccountMove(models.Model):
                     }
                     email_template.with_context(customer_name=user.name).send_mail(order.id, force_send=True,
                                                                                    email_values=email_values)
+
     def action_approve(self):
         template_id = self.env.ref('pragtech_approval_hub_invoice.approval_invoice_approve_template_id')
         for order in self:
@@ -147,6 +148,7 @@ class AccountMove(models.Model):
                     return True
             else:
                 raise ValidationError(_("You don't have permission to Approve this order."))
+
     def action_reject(self):
         for order in self:
             logged_in_user = self.env.user
@@ -185,10 +187,12 @@ class ApprovalUserLine(models.Model):
         ('approved', 'Approved'),
         ('rejected', 'Rejected'),
     ], string='Status', required=True, default='waiting_approval', readonly=True)
+
     state = fields.Selection([
         ('mandatory', 'Mandatory'),
         ('not_mandatory', 'Not Mandatory'),
     ], string='Status', default='mandatory', readonly=True)
+
     invoice_id = fields.Many2one('account.move', string='Invoice ID', readonly=True)
     has_approved = fields.Boolean(string='Has Approved', default=False, readonly=True)
     has_rejected = fields.Boolean(string='Has Rejected', default=False, readonly=True)
@@ -205,6 +209,7 @@ class SaleApprovalHubForm(models.Model):
             [('model', '=', 'account.move')]
         ])
         return domain
+
     model_id = fields.Many2one(
         'ir.model',
         string='Model Name',

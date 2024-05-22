@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <odoo>
     <data>
         <record id="approval_user_email_template_id" model="mail.template">
@@ -11,15 +12,17 @@
                     <h1>
                         <t t-if="object.model_id.model == 'sale.order'">Sales Order</t>
                         <t t-if="object.model_id.model == 'purchase.order'">Purchase Order</t>
-                        <t t-if="object.model_id.model == 'account.move'">Invoice</t>
-                        <t t-if="object.model_id.model == 'stock.picking'">Inventory Stock</t>
+                        <t t-if="object.model_id.model == 'account.move'">Invoicing</t>
+                        <t t-if="object.model_id.model == 'account.move'">Inventory</t>
+                        <t t-if="object.model_id.model == 'account.payment'">Payment</t>
                         Approval Request
                     </h1>
                     <p>A new
                         <t t-if="object.model_id.model == 'sale.order'">sales order</t>
                         <t t-if="object.model_id.model == 'purchase.order'">purchase order</t>
-                        <t t-if="object.model_id.model == 'account.move'">Invoice</t>
-                        <t t-if="object.model_id.model == 'stock.picking'">Inventory Stock</t>
+                        <t t-if="object.model_id.model == 'account.move'">Invoicing</t>
+                        <t t-if="object.model_id.model == 'account.move'">Inventory</t>
+                        <t t-if="object.model_id.model == 'account.payment'">Payment</t>
                         requires your Approval.
                     </p>
                     <p>
@@ -33,13 +36,13 @@
                     <p>Please review the details and take the necessary action to Approve or Reject this
                         <t t-if="object.model_id.model == 'sale.order'">sales order.</t>
                         <t t-if="object.model_id.model == 'purchase.order'">purchase order.</t>
-                        <t t-if="object.model_id.model == 'account.move'">Invoice</t>
-                        <t t-if="object.model_id.model == 'stock.picking'">Inventory Stock</t>
+                        <t t-if="object.model_id.model == 'account.move'">Invoicing</t>
+                        <t t-if="object.model_id.model == 'account.move'">Inventory</t>
+                        <t t-if="object.model_id.model == 'account.payment'">Payment</t>
 
                     </p>
                     <br/>
                     <br/>
-                    <!-- Add a table for user approval lines -->
                     <table style="border-collapse: collapse; width: 100%; border: 1px solid #000; text-align: center;">
                         <thead>
                             <tr style="background-color: #333; color: #fff; font-weight: bold;">

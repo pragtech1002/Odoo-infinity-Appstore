@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <odoo>
     <data>
         <record id="approval_approve_template_id" model="mail.template">

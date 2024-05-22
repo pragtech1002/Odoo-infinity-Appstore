@@ -76,12 +76,13 @@ class Picking(models.Model):
         else:
             result['is_configured'] = False
         return result
-
     def action_submit(self):
         for order in self:
             approvehub_form = self.env['approvehub.form'].sudo().search([('model_id.model', '=', 'stock.picking')],
                                                                         limit=1)
-
+            user_ids = order.approval_user_line_ids.user_id.ids
+            if not user_ids:
+                raise ValidationError(_("Please add At Least One User in Approval."))
             if approvehub_form.domain_filter:
                 model_name = approvehub_form.model_id.model
                 domain = eval(approvehub_form.domain_filter)
@@ -168,8 +169,6 @@ class Picking(models.Model):
                     raise ValidationError(_("You don't have permission to Reject this order."))
             else:
                 raise ValidationError(_("You don't have permission to reject this order."))
-
-
 class ApprovalUserLine(models.Model):
     _name = 'approvehub.stock.user.line'
 
@@ -179,14 +178,17 @@ class ApprovalUserLine(models.Model):
         ('approved', 'Approved'),
         ('rejected', 'Rejected'),
     ], string='Status', required=True, default='waiting_approval', readonly=True)
+
     state = fields.Selection([
         ('mandatory', 'Mandatory'),
         ('not_mandatory', 'Not Mandatory'),
     ], string='Status', default='mandatory', readonly=True)
+
     stock_order_id = fields.Many2one('stock.picking', string="Inventory Stock", readonly=True)
     has_approved = fields.Boolean(string='Has Approved', default=False, readonly=True)
     has_rejected = fields.Boolean(string='Has Rejected', default=False, readonly=True)
     rejection_reason = fields.Text(string='Rejection Reason', readonly=True)
+
 
 class ApproveHubForm(models.Model):
     _inherit = 'approvehub.form'

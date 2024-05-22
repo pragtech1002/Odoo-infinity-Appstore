@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Pragmatic Approve Hub Payment",
-    'version': '16.0.4',
+    'version': '17.0.0.1',
     'category': 'Services',
     'author': 'Pragmatic TechSoft Pvt Ltd.',
     'website': 'http://pragtech.co.in',
     'summary': 'Pragmatic Approve Hub Payment',
     'description': 'Pragmatic Approve Hub Payment',
-    'depends': ['base','mail','pragtech_approval_hub','account'],
-
+    'depends': ['base', 'mail', 'pragtech_approval_hub', 'account'],
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
