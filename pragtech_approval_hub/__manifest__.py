@@ -22,7 +22,7 @@
     'images': ['static/description/approve_hub_management_system.gif'],
     'live_test_url': 'http://www.pragtech.co.in/company/proposal-form.html?id=103&name=Pragmatic-Approve-Hub',
     'currency': 'USD',
-    'price': 20,
+    'price': 220,
     'license': 'OPL-1',
     'installable': True,
     'application': False,
